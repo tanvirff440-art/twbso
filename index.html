@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWBSO</title>
+<link rel="icon" type="image/png" href="logo.png">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#00ff4c,#b10909);
+    color:rgb(27, 1, 1);
+}
+
+/* HEADER */
+header{
+    text-align:center;
+    padding:80px 20px;
+}
+
+header h1{
+    font-size:50px;
+    margin-bottom:10px;
+}
+
+header p{
+    font-size:20px;
+}
+
+/* IMAGE RGB BORDER */
+.rgb-border{
+    display:block;
+    margin:20px auto;
+    width:400px;
+    border:5px solid red;
+    border-radius:15px;
+    animation: rgbGlow 3s infinite linear;
+}
+
+@keyframes rgbGlow{
+    0%{border-color:rgb(209, 14, 14);}
+    25%{border-color:blue;}
+    50%{border-color:green;}
+    75%{border-color:yellow;}
+    100%{border-color:rgb(0, 0, 0);}
+}
+
+/* CONTAINER */
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
+}
+
+/* CARD */
+.card{
+    background:rgb(158, 211, 14);
+    color:black;
+    padding:25px;
+    border-radius:15px;
+    margin:20px 0;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* SKILLS */
+.skills{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.skill{
+    background:#0077ff;
+    color:white;
+    padding:10px 15px;
+    border-radius:20px;
+}
+
+/* BUTTON */
+button{
+    background:#0077ff;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#0056cc;
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:20px;
+    margin-top:30px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+    <h1>🤛Welcome to TWBSO🤜</h1>
+    <p>Aesthetic theme</p>
+</header>
+
+<!-- IMAGE -->
+<img src="car.png" alt="Car" class="rgb-border">
+
+<div class="container">
+
+    <div class="card">
+        <h2>About the web</h2>
+        <p>🍷Since you've made it here, you might as well stay forever🍷</p>
+    </div>
+
+    <div class="card">
+        <h2>💩 Empty Section</h2>
+        <div class="skills">
+            <div class="skill">empty💩</div>
+            <div class="skill">empty💩</div>
+            <div class="skill">empty💩</div>
+            <div class="skill">empty💩</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🎉 Click The Button</h2>
+        <button onclick="showMessage()">Click Me 🙂</button>
+        <p id="message" style="margin-top:15px;"></p>
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 TWBSO | All Rights Reserved</p>
+</footer>
+
+<script>
+function showMessage(){
+    document.getElementById("message").innerHTML =
+    "🔥 Keep Learning, Trust Allah & Work Hard!";
+}
+</script>
+
+</body>
+</html>
