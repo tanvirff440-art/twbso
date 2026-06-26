@@ -23,6 +23,7 @@ body{
     color:rgb(27, 1, 1);
 }
 
+
 /* HEADER */
 header{
     text-align:center;
@@ -102,6 +103,31 @@ header p{
     padding:10px 15px;
     border-radius:20px;
 }
+.show-btn{
+    display:block;
+    margin:30px auto;
+    padding:15px 35px;
+    font-size:18px;
+    font-weight:bold;
+    color:white;
+    background:linear-gradient(45deg,#ff0000,#00ff00,#0000ff);
+    background-size:300%;
+    border:none;
+    border-radius:50px;
+    cursor:pointer;
+    animation:rgbButton 4s linear infinite;
+    box-shadow:0 0 20px cyan;
+    transition:0.3s;
+}
+
+.show-btn:hover{
+    transform:scale(1.08);
+}
+
+@keyframes rgbButton{
+    0%{background-position:0%;}
+    100%{background-position:300%;}
+}
 
 /* BUTTON */
 button{
@@ -134,13 +160,21 @@ footer{
     <h1>▂▃▅▇█ Welcome to TWBSO █▇▅▃▂</h1>
     <p>Aesthetic theme</p>
 </header>
+<button class="show-btn" onclick="toggleGallery()" id="galleryBtn">
+📷 Show Images
+</button>
+<div id="gallery" style="display:none;">
+<img src="car.png" class="center-img rgb-border">
 
-<!-- IMAGE -->
-<img src="car.png" alt="Car" class="rgb-border">
-<img src="car2.png" alt="car2" width="400" class="center-img rgb-border">
-<img src="car3.png" alt="car3" width="400" class="center-img rgb-border">
-<img src="car4.png" alt="car3" width="400"class="center-img rgb-border">
+<img src="car2.png" class="center-img rgb-border">
 
+<img src="car3.png" class="center-img rgb-border">
+
+<img src="car4.png" class="center-img rgb-border">
+
+
+
+</div>
 <div class="container">
 
     <div class="card">
@@ -175,6 +209,29 @@ function showMessage(){
     document.getElementById("message").innerHTML =
     "_-_-_-_-_-_-_-_-_-_-_-_-_-_-";
 }
+
+function showImages(){
+    document.getElementById("gallery").style.display = "block";
+}
+function toggleGallery(){
+
+    var gallery = document.getElementById("gallery");
+    var btn = document.getElementById("galleryBtn");
+
+    if(gallery.style.display=="none"){
+
+        gallery.style.display="block";
+        btn.innerHTML="❌ Hide Images";
+
+    }else{
+
+        gallery.style.display="none";
+        btn.innerHTML="📷 Show Images";
+
+    }
+
+}
+
 
 </script>
 
