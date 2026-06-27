@@ -150,6 +150,44 @@ footer{
     padding:20px;
     margin-top:30px;
 }
+/* ===== Puzzle Board ===== */
+
+#board{
+    width:360px;
+    height:360px;
+    margin:20px auto;
+    border:4px solid white;
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    grid-template-rows:repeat(6,1fr);
+    gap:2px;
+    background:black;
+}
+#gameContainer{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:30px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+#referenceImage{
+    width:250px;
+    height:250px;
+    object-fit:cover;
+    border:4px solid white;
+    border-radius:15px;
+    box-shadow:0 0 20px cyan;
+}
+.tile{
+    border:1px solid white;
+    background-size:360px 360px;
+    cursor:pointer;
+
+    user-select: none;
+    transition: 0.2s;
+}
 </style>
 
 </head>
@@ -164,18 +202,49 @@ footer{
 📷 Show Images
 </button>
 <div id="gallery" style="display:none;">
-<img src="car.png" class="center-img rgb-border">
+<img src="car.png" class="center-img rgb-border" onclick="selectImage('car.png')">
+<img src="car2.png" class="center-img rgb-border" onclick="selectImage('car2.png')">
 
-<img src="car2.png" class="center-img rgb-border">
+<img src="car3.png" class="center-img rgb-border" onclick="selectImage('car3.png')">
 
-<img src="car3.png" class="center-img rgb-border">
+<img src="car4.png" class="center-img rgb-border" onclick="selectImage('car4.png')">
+</div>
+<div id="gamePanel" style="display:none; text-align:center; margin-top:30px;">
 
-<img src="car4.png" class="center-img rgb-border">
+<h2 id="selectedText">Selected Image</h2>
 
+<button class="show-btn" onclick="startPuzzle()">
+🎮 Start Puzzle
+</button>
 
+</div>
+<div id="puzzleArea" style="display:none; text-align:center; margin-top:30px;">
+
+    <h2>🧩 Puzzle Game</h2>
+
+    <p>Difficulty: 6 × 6</p>
+
+    <div id="gameContainer">
+<h3 id="moveCounter">Moves: 0</h3>
+    <div id="board"></div>
+
+    <div>
+
+        <h3>🖼️ Reference</h3>
+
+<img id="referenceImage" src="">
+
+<button class="show-btn" onclick="toggleReference()" id="refBtn">
+👁️ Hide Reference
+</button>
+
+    </div>
+
+</div>
 
 </div>
 <div class="container">
+
 
     <div class="card">
         <h2>About the web</h2>
@@ -231,9 +300,140 @@ function toggleGallery(){
     }
 
 }
+let selectedImage = "";
+let dragTile = null;
+let dropTile = null;
+let Moves = 0;
+function selectImage(image){
 
+    selectedImage = image;
 
+    document.getElementById("gamePanel").style.display = "block";
+
+    document.getElementById("selectedText").innerHTML =
+    "✅ Selected: " + image;
+
+}
+function shuffleTiles(){
+
+    let tiles = Array.from(document.querySelectorAll(".tile"));
+
+    for(let i = tiles.length - 1; i > 0; i--){
+
+        let j = Math.floor(Math.random() * (i + 1));
+
+        let temp = tiles[i].style.backgroundPosition;
+
+        tiles[i].style.backgroundPosition =
+        tiles[j].style.backgroundPosition;
+
+        tiles[j].style.backgroundPosition = temp;
+
+    }
+
+}
+function startPuzzle(){
+
+    document.getElementById("gallery").style.display = "none";
+    document.getElementById("galleryBtn").style.display = "none";
+    document.getElementById("gamePanel").style.display = "none";
+
+    document.getElementById("puzzleArea").style.display = "block";
+
+    let board = document.getElementById("board");
+    document.getElementById("referenceImage").src = selectedImage;
+    board.innerHTML = "";
+
+    for(let i = 0; i < 36; i++){
+
+    let row = Math.floor(i / 6);
+    let col = i % 6;
+
+    board.innerHTML += `
+<div class="tile"
+draggable="true"
+style="
+background-image:url('${selectedImage}');
+background-position:${-col*60}px ${-row*60}px;
+">
+</div>
+`;
+
+}
+let tiles = document.querySelectorAll(".tile");
+
+tiles.forEach(tile => {
+
+    tile.addEventListener("dragstart", function(){
+
+        dragTile = this;
+
+    });
+    tile.addEventListener("dragover", function(e){
+
+    e.preventDefault();
+
+});
+tile.addEventListener("drop", function(){
+
+    dropTile = this;
+
+    let bg1 = dragTile.style.backgroundPosition;
+    let bg2 = dropTile.style.backgroundPosition;
+
+    dragTile.style.backgroundPosition = bg2;
+    dropTile.style.backgroundPosition = bg1;
+    moves++;
+document.getElementById("moveCounter").innerHTML = "Moves: " + moves;
+
+});
+});
+shuffleTiles();
+
+}
+function toggleReference(){
+
+    let img = document.getElementById("referenceImage");
+    let btn = document.getElementById("refBtn");
+
+    if(img.style.display === "none"){
+
+        img.style.display = "block";
+        btn.innerHTML = "👁️ Hide Reference";
+
+    }else{
+
+        img.style.display = "none";
+        btn.innerHTML = "👁️ Show Reference";
+
+    }
+
+}
 </script>
+<div id="winScreen" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:9999;
+color:white;
+font-family:Arial;
+">
 
+<h1 style="font-size:55px;">🏆 YOU WIN! 🏆</h1>
+
+<h2>🎉 Congratulations! 🎉</h2>
+
+<button class="show-btn" onclick="location.reload()">
+🔄 Play Again
+</button>
+
+</div>
 </body>
 </html>
