@@ -153,15 +153,13 @@ footer{
 /* ===== Puzzle Board ===== */
 
 #board{
-    width:360px;
-    height:360px;
-    margin:20px auto;
-    border:4px solid white;
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    grid-template-rows:repeat(3,1fr);
-    gap:2px;
-    background:black;
+    width: min(90vw, 360px);
+    aspect-ratio: 1/1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+    border: 4px solid white;
 }
 #gameContainer{
     display:flex;
@@ -181,13 +179,11 @@ footer{
     box-shadow:0 0 20px cyan;
 }
 .tile{
-    width:120px;
-    height:120px;
-    border:1px solid white;
-    background-size:360px 360px;
-    cursor:pointer;
-    user-select:none;
-    transition:0.2s;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    user-select: none;
+    background-size: 300% 300%;
 }
 #timerBox{
     display:inline-flex;
@@ -386,7 +382,7 @@ header p{
 <body>
 
 <header>
-    <h1>▂▃▅▇█ Welcome to TWBSO █▇▅▃▂</h1>
+    <h1> Welcome to TWBSO </h1>
     <p>Aesthetic theme</p>
 </header>
 <button class="show-btn" onclick="toggleGallery()" id="galleryBtn">
@@ -613,7 +609,8 @@ draggable="true"
 data-id="${i}"
 style="
 background-image:url('${selectedImage}');
-background-position:${-col*120}px ${-row*120}px;
+background-size:300% 300%;
+background-position:${col * -100}% ${row * -100}%;
 ">
 </div>
 `;
