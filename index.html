@@ -375,6 +375,16 @@ header p{
 }
 
 }
+#waveCanvas{
+    display: block;
+    margin: 20px auto;
+    width: min(90vw, 900px);
+    aspect-ratio: 9 / 5;
+    background: #000;
+    border: 2px solid cyan;
+    border-radius: 20px;
+    box-shadow: 0 0 30px cyan;
+}
 </style>
 
 </head>
@@ -459,21 +469,7 @@ color:white;
 margin-top:80px;">
 🌈 RGB Wave Game
 </h1>
-<canvas id="waveCanvas"
-width="900"
-height="500"
-style="
-display:block;
-margin:30px auto;
-width:90%;
-max-width:900px;
-height:500px;
-background:#000;
-border:2px solid cyan;
-border-radius:20px;
-box-shadow:0 0 30px cyan;
-">
-</canvas>
+<canvas id="waveCanvas"></canvas>
 </div>
 <div class="container">
 
@@ -810,9 +806,16 @@ function openWaveGame(){
     waveCanvas = document.getElementById("waveCanvas");
     waveCtx = waveCanvas.getContext("2d");
 
-    resetWave();
-    renderWave();
+    // 🔥 auto fit like puzzle system
+    setTimeout(() => {
 
+        waveCanvas.width = waveCanvas.clientWidth;
+        waveCanvas.height = waveCanvas.clientHeight;
+
+        resetWave();
+        renderWave();
+
+    }, 50);
 }
 function closeWaveGame(){
     document.getElementById("waveGame").style.display = "none";
