@@ -308,6 +308,77 @@ footer{
     }
 
 }
+/* ========================= */
+/* 📱 Responsive Design */
+/* ========================= */
+
+@media (max-width:768px){
+
+header{
+    padding:40px 15px;
+}
+
+header h1{
+    font-size:30px;
+    line-height:1.2;
+    word-break:break-word;
+}
+
+header p{
+    font-size:16px;
+}
+
+.container{
+    width:95%;
+    padding:10px;
+}
+
+.card{
+    padding:18px;
+}
+
+.rgb-border{
+    width:95%;
+    max-width:350px;
+}
+
+.show-btn{
+    width:90%;
+    max-width:320px;
+    font-size:17px;
+}
+
+#board{
+    width:300px;
+    height:300px;
+}
+
+.tile{
+    background-size:300px 300px;
+}
+
+}
+
+@media (min-width:769px){
+
+.container{
+    width:1000px;
+}
+
+.rgb-border{
+    width:400px;
+}
+
+#board{
+    width:360px;
+    height:360px;
+}
+
+.tile{
+    background-size:360px 360px;
+}
+
+}
 </style>
 
 </head>
@@ -320,6 +391,9 @@ footer{
 </header>
 <button class="show-btn" onclick="toggleGallery()" id="galleryBtn">
 📷 Show Images
+</button>
+<button class="show-btn" onclick="openWaveGame()" id="waveBtn">
+🌈 RGB Wave Game
 </button>
 <div id="gallery" style="display:none;">
 <img src="car.png" class="center-img rgb-border" onclick="selectImage('car.png')">
@@ -365,6 +439,45 @@ footer{
 
 </div>
 
+</div>
+<div id="waveGame" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#111;
+z-index:99999;
+">
+
+<button class="show-btn"
+onclick="closeWaveGame()"
+style="position:absolute;top:20px;left:20px;width:150px;">
+⬅ Back
+</button>
+
+<h1 style="
+text-align:center;
+color:white;
+margin-top:80px;">
+🌈 RGB Wave Game
+</h1>
+<canvas id="waveCanvas"
+width="900"
+height="500"
+style="
+display:block;
+margin:30px auto;
+width:90%;
+max-width:900px;
+height:500px;
+background:#000;
+border:2px solid cyan;
+border-radius:20px;
+box-shadow:0 0 30px cyan;
+">
+</canvas>
 </div>
 <div class="container">
 
@@ -480,6 +593,7 @@ document.getElementById("timer").innerText = "00:00";
 startTimer();
     document.getElementById("gallery").style.display = "none";
     document.getElementById("galleryBtn").style.display = "none";
+    document.getElementById("waveBtn").style.display = "none";
     document.getElementById("gamePanel").style.display = "none";
 
     document.getElementById("puzzleArea").style.display = "block";
@@ -621,6 +735,90 @@ function createLeaves(){
 
     }
 
+}
+// ===== RGB Wave Game V2.0 =====
+
+let waveCanvas;
+let waveCtx;
+
+let rope = [];
+let trails = [];
+
+let dragging = false;
+
+const SEGMENTS = 35;
+const SEGMENT_LENGTH = 10;
+
+let anchor = {
+    x: 450,
+    y: 70
+};
+
+function resetWave(){
+
+    rope = [];
+
+    for(let i = 0; i < SEGMENTS; i++){
+
+        rope.push({
+
+            x: anchor.x,
+            y: anchor.y + i * SEGMENT_LENGTH,
+
+            oldX: anchor.x,
+            oldY: anchor.y + i * SEGMENT_LENGTH
+
+        });
+
+    }
+
+}
+function renderWave(){
+
+    waveCtx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
+
+    waveCtx.strokeStyle = "cyan";
+    waveCtx.lineWidth = 4;
+
+    waveCtx.beginPath();
+    waveCtx.moveTo(rope[0].x, rope[0].y);
+
+    for(let i=1;i<rope.length;i++){
+
+        waveCtx.lineTo(rope[i].x, rope[i].y);
+
+    }
+
+    waveCtx.stroke();
+
+    waveCtx.fillStyle = "white";
+    waveCtx.beginPath();
+    waveCtx.arc(anchor.x,anchor.y,6,0,Math.PI*2);
+    waveCtx.fill();
+
+    let end = rope[rope.length-1];
+
+    waveCtx.fillStyle = "cyan";
+    waveCtx.beginPath();
+    waveCtx.arc(end.x,end.y,16,0,Math.PI*2);
+    waveCtx.fill();
+
+    requestAnimationFrame(renderWave);
+
+}
+function openWaveGame(){
+
+    document.getElementById("waveGame").style.display = "block";
+
+    waveCanvas = document.getElementById("waveCanvas");
+    waveCtx = waveCanvas.getContext("2d");
+
+    resetWave();
+    renderWave();
+
+}
+function closeWaveGame(){
+    document.getElementById("waveGame").style.display = "none";
 }
 </script>
 <div id="winScreen" style="
