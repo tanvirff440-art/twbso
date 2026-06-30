@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TWBSO Puzzle</title>
+
+<style>
+
+
+#winTitle{
+
+font-size:55px;
+
+color:#FFD700;
+
+text-shadow:
+0 0 10px gold,
+0 0 20px orange,
+0 0 40px red;
+
+animation:winGlow 1s infinite alternate;
+
+}
+
+@keyframes winGlow{
+
+from{
+
+transform:scale(1);
+
+}
+
+to{
+
+transform:scale(1.08);
+
+text-shadow:
+0 0 20px gold,
+0 0 40px orange,
+0 0 60px red;
+
+}
+
+}
+
+
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#00ff4c,#b10909);
+min-height:100vh;
+}
+
+/* ---------- BUTTON ---------- */
+
+.show-btn{
+
+display:block;
+width:90%;
+max-width:320px;
+
+margin:15px auto;
+
+padding:15px;
+
+font-size:18px;
+font-weight:bold;
+
+border:none;
+border-radius:50px;
+
+color:white;
+
+cursor:pointer;
+
+background:linear-gradient(45deg,#ff0000,#00ff00,#0000ff);
+background-size:300%;
+
+animation:rgbButton 4s linear infinite;
+
+}
+
+@keyframes rgbButton{
+
+0%{
+background-position:0%;
+}
+
+100%{
+background-position:300%;
+}
+
+}
+
+/* ---------- LEVEL MENU ---------- */
+
+#levelMenu{
+
+width:92%;
+max-width:450px;
+
+margin:40px auto;
+
+text-align:center;
+
+}
+
+#levelMenu h1{
+
+color:white;
+
+margin-bottom:30px;
+
+font-size:34px;
+
+}
+
+/* ---------- GAME SCREEN ---------- */
+
+#gameScreen{
+
+display:none;
+
+padding:20px;
+
+text-align:center;
+
+}
+
+#levelTitle{
+
+color:yellow;
+
+margin-top:10px;
+
+}
+
+#moveCounter{
+
+color:white;
+
+margin-top:10px;
+
+}
+
+#timerBox{
+
+display:inline-flex;
+
+gap:10px;
+
+align-items:center;
+
+padding:10px 15px;
+
+margin-top:15px;
+
+background:rgba(0,0,0,.6);
+
+border:2px solid cyan;
+
+border-radius:10px;
+
+color:#00ffcc;
+
+font-size:20px;
+
+}
+
+#timerBtn{
+
+padding:6px 12px;
+
+border:none;
+
+border-radius:8px;
+
+cursor:pointer;
+
+}
+
+/* ---------- GAME ---------- */
+
+#gameContainer{
+
+display:flex;
+
+justify-content:center;
+
+align-items:flex-start;
+
+gap:30px;
+
+margin-top:25px;
+
+flex-wrap:wrap;
+
+}
+
+#board{
+
+width:min(90vw,360px);
+
+aspect-ratio:1;
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+grid-template-rows:repeat(3,1fr);
+
+gap:2px;
+
+border:4px solid white;
+
+}
+
+.tile{
+
+border:1px solid rgba(255,255,255,.3);
+
+cursor:pointer;
+
+}
+
+#referenceImage{
+
+width:min(80vw,250px);
+
+border:4px solid white;
+
+border-radius:15px;
+
+}
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:768px){
+
+#gameContainer{
+
+flex-direction:column;
+
+align-items:center;
+
+}
+
+#board{
+
+width:300px;
+
+}
+
+#referenceImage{
+
+width:220px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="levelMenu">
+
+<h1>🧩 TWBSSO Puzzle Game</h1>
+
+<button class="show-btn"
+onclick="location.href='index.html'">
+⬅ Back
+</button>
+
+<button class="show-btn" onclick="startLevel(1)">Level 1</button>
+
+<button class="show-btn" onclick="startLevel(2)">Level 2</button>
+
+<button class="show-btn" onclick="startLevel(3)">Level 3</button>
+
+<button class="show-btn" onclick="startLevel(4)">Level 4</button>
+
+<button class="show-btn" onclick="startLevel(5)">Level 5</button>
+
+<button class="show-btn" onclick="startLevel(6)">Level 6</button>
+
+<button class="show-btn" onclick="startLevel(7)">Level 7</button>
+
+<button class="show-btn" onclick="startLevel(8)">Level 8</button>
+
+<button class="show-btn" onclick="startLevel(9)">Level 9</button>
+
+<button class="show-btn" onclick="startLevel(10)">Level 10</button>
+
+</div>
+
+<div id="gameScreen">
+
+<h2 style="color:white;">🧩 Puzzle Game</h2>
+
+<h2 id="levelTitle">
+Level 1
+</h2>
+
+<h3 id="moveCounter">
+Moves : 0
+</h3>
+
+<div id="timerBox">
+
+⏱️
+
+<span id="timer">
+00:00
+</span>
+
+<button id="timerBtn" onclick="toggleTimer()">
+⏸️ Pause
+</button>
+</div>
+
+<div id="gameContainer">
+
+<div id="board">
+
+</div>
+
+<div>
+
+<h3 style="color:white;">
+
+🖼️ Reference
+
+</h3>
+
+<img id="referenceImage">
+
+<button class="show-btn"
+id="refBtn"
+onclick="toggleReference()">
+👁️ Hide Reference
+</button>
+
+</div>
+
+</div>
+
+<button class="show-btn" onclick="backToLevels()">
+⬅ Back
+</button>
+
+</div>
+
+<script>
+
+
+
+function nextLevel(){
+
+    document.getElementById("winScreen").style.display = "none";
+
+    if(currentLevel < 10){
+
+        startLevel(currentLevel + 1);
+
+    }else{
+
+        alert("🏆 All Levels Completed!");
+        backToLevels();
+
+    }
+
+}
+
+
+
+
+let time = 0;
+let timer = null;
+let isRunning = false;
+    const levelImages = {
+    1:"car.png",
+    2:"car2.png",
+    3:"car3.png",
+    4:"car4.png",
+    5:"car5.png",
+    6:"car6.png",
+    7:"car7.png",
+    8:"car8.png",
+    9:"car9.png",
+    10:"car10.png"
+};
+let dragTile = null;
+let dropTile = null;
+let moves = 0;
+function startLevel(level){
+
+    currentLevel = level;
+
+    document.getElementById("winScreen").style.display = "none";
+
+    document.getElementById("levelMenu").style.display="none";
+
+    document.getElementById("gameScreen").style.display="block";
+
+    time = 0;
+
+document.getElementById("timer").innerHTML = "00:00";
+
+startTimer();
+
+    document.getElementById("levelTitle").innerHTML="Level "+level;
+
+    let img = levelImages[level];
+
+    document.getElementById("referenceImage").src = img;
+
+    let board = document.getElementById("board");
+
+    board.innerHTML="";
+
+    for(let i=0;i<9;i++){
+
+        let row=Math.floor(i/3);
+
+        let col=i%3;
+
+      board.innerHTML += `
+<div class="tile"
+draggable="true"
+data-id="${i}"
+style="
+background-image:url('${img}');
+background-size:300% 300%;
+background-position:${col*-100}% ${row*-100}%;
+">
+</div>
+`;
+
+    }
+shuffleTiles();
+let tiles = document.querySelectorAll(".tile");
+
+tiles.forEach(tile=>{
+
+    tile.addEventListener("dragstart",function(){
+
+        dragTile = this;
+
+    });
+
+    tile.addEventListener("dragover",function(e){
+
+        e.preventDefault();
+
+    });
+
+    tile.addEventListener("drop",function(){
+
+        dropTile = this;
+
+        // Image Swap
+        let bg1 = dragTile.style.backgroundPosition;
+        let bg2 = dropTile.style.backgroundPosition;
+
+        dragTile.style.backgroundPosition = bg2;
+        dropTile.style.backgroundPosition = bg1;
+
+        // ID Swap
+        let id1 = dragTile.dataset.id;
+        let id2 = dropTile.dataset.id;
+
+        dragTile.dataset.id = id2;
+        dropTile.dataset.id = id1;
+
+        // Move Counter
+        moves++;
+
+        document.getElementById("moveCounter").innerHTML =
+        "Moves: " + moves;
+if(checkWin()){
+
+    stopTimer();
+
+    document.getElementById("winScreen").style.display = "flex";
+
+}
+    });
+
+});
+}
+function shuffleTiles(){
+
+    let tiles = Array.from(document.querySelectorAll(".tile"));
+
+    for(let i = tiles.length - 1; i > 0; i--){
+
+        let j = Math.floor(Math.random() * (i + 1));
+
+        // Background Swap
+        let bg = tiles[i].style.backgroundPosition;
+        tiles[i].style.backgroundPosition = tiles[j].style.backgroundPosition;
+        tiles[j].style.backgroundPosition = bg;
+
+        // Dataset ID Swap
+        let id = tiles[i].dataset.id;
+        tiles[i].dataset.id = tiles[j].dataset.id;
+        tiles[j].dataset.id = id;
+    }
+
+}
+function checkWin(){
+
+    let tiles = document.querySelectorAll(".tile");
+
+    for(let i=0;i<tiles.length;i++){
+
+        if(Number(tiles[i].dataset.id) !== i){
+            return false;
+        }
+
+    }
+
+    return true;
+
+}
+function formatTime(sec){
+
+    let min = Math.floor(sec / 60);
+    let s = sec % 60;
+
+    return String(min).padStart(2,"0") + ":" +
+           String(s).padStart(2,"0");
+
+}
+
+function startTimer(){
+
+    clearInterval(timer);
+
+    timer = setInterval(function(){
+
+        time++;
+
+        document.getElementById("timer").innerHTML =
+        formatTime(time);
+
+    },1000);
+
+    document.getElementById("timerBtn").innerHTML =
+    "⏸️ Pause";
+
+}
+
+function stopTimer(){
+
+    clearInterval(timer);
+
+    timer = null;
+
+    document.getElementById("timerBtn").innerHTML =
+    "▶️ Resume";
+
+}
+
+function toggleTimer(){
+
+    if(timer === null){
+
+        startTimer();
+
+    }else{
+
+        stopTimer();
+
+    }
+
+}
+
+function backToLevels(){
+
+    stopTimer();
+
+    document.getElementById("winScreen").style.display = "none";
+
+    document.getElementById("gameScreen").style.display = "none";
+
+    document.getElementById("levelMenu").style.display = "block";
+
+}
+
+function toggleReference(){
+
+    let img = document.getElementById("referenceImage");
+    let btn = document.getElementById("refBtn");
+
+    if(img.style.display === "none"){
+
+        img.style.display = "block";
+        btn.innerHTML = "👁️ Hide Reference";
+
+    }else{
+
+        img.style.display = "none";
+        btn.innerHTML = "👁️ Show Reference";
+
+    }
+
+}
+
+</script>
+
+
+
+
+
+<div id="winScreen" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.85);
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:9999;
+">
+
+<h1 id="winTitle">🏆 YOU WIN! 🏆</h1>
+
+<h2 style="color:white;">
+🎉 Congratulations 🎉
+</h2>
+
+<button class="show-btn"
+id="nextBtn"
+onclick="nextLevel()">
+➡ Next Level
+</button>
+
+<button class="show-btn"
+onclick="backToLevels()">
+⬅ Back
+</button>
+
+</div>
+
+
+
+
+</body>
+</html>
